@@ -51,6 +51,62 @@ const props = defineProps({
   zoom: { type: Number, default: 9 },
   // 地图显示的缩放级别范围
   zooms: { type: Array, default: () => [8, 18] },
+  // 是否绘制点位
+  isDrawPoint: { type: Boolean, default: true },
+  // 点位数据
+  pointData: {
+    type: Array,
+    default: () => [
+      {
+        // 唯一值
+        iden: '点位1',
+        // 坐标
+        lngLat: [120.212192, 30.162905],
+        // marker点位基于坐标的偏移量
+        offset: [-13, -30],
+        // 自定义图标(Object可设置精灵图定位，String为图标地址)
+        icon: {
+          // 图标大小
+          size: [25, 34],
+          // 图标地址
+          image: '//a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',
+          // 图标所用的图片大小
+          imageSize: [135, 40],
+          // 图标取图偏移量(背景图定位)
+          imageOffset: [-9, -3],
+        },
+      },
+      {
+        // 唯一值
+        iden: '点位2',
+        // 坐标
+        lngLat: [120.081729, 30.20564],
+        // marker点位基于坐标的偏移量
+        offset: [-13, -30],
+        // 自定义图标(Object可设置精灵图定位，String为图标地址)
+        icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png',
+      },
+      {
+        // 唯一值
+        iden: '点位3',
+        // 坐标
+        lngLat: [120.083102, 30.129654],
+        // marker点位基于坐标的偏移量
+        offset: [-13, -30],
+        // 自定义图标(Object可设置精灵图定位，String为图标地址)
+        icon: {
+          // 图标大小
+          size: [25, 34],
+          // 图标地址
+          image: '//a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',
+          // 图标所用的图片大小
+          imageSize: [135, 40],
+          // 图标取图偏移量(背景图定位)
+          imageOffset: [-95, -3],
+        },
+      },
+    ],
+  },
 })
 
 const mapInstance = ref(null)
@@ -104,9 +160,53 @@ const initMapInstance = (AMap: any) => {
 
     // 渲染边界
     renderPolyLine(bounds)
+
+    // 渲染点位
+    renderPoint()
   })
 }
 
+// 渲染点位
+const renderPoint = () => {
+  const { isDrawPoint, pointData }: any = props
+
+  if (isDrawPoint) {
+    const makers = []
+
+    for (let i = 0; i < pointData.length; i++) {
+      // 定义图标
+      let icon = pointData[i].icon
+      if (typeof pointData[i].icon !== 'string') {
+        icon = new AMap.Icon({
+          // 图标尺寸
+          size: new AMap.Size(...pointData[i].icon.size),
+          // 图标的取图地址
+          image: pointData[i].icon.image,
+          // 图标所用图片大小
+          imageSize: new AMap.Size(...pointData[i].icon.imageSize),
+          // 图标取图偏移量
+          imageOffset: new AMap.Pixel(...pointData[i].icon.imageOffset),
+        })
+      }
+      // 定义maker
+      const maker = new AMap.Marker({
+        position: new AMap.LngLat(...pointData[i].lngLat),
+        offset: new AMap.Pixel(...pointData[i].offset),
+        icon,
+      })
+      // 点位添加点击事件
+      maker.on('click', function () {
+        console.log(pointData[i])
+      })
+      // 添加maker
+      makers.push(maker)
+    }
+    // 添加点位到地图
+    mapInstance.value.add(makers)
+  }
+}
+
+// 加载地图
 const loadAMap = () => {
   AMapLoader.load({
     key: 'd594dce215ba1945908095cf0043d0d9',
