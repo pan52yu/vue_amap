@@ -22,13 +22,13 @@ const props = defineProps({
     }),
   },
   // 区域名
-  areaName: { type: String, default: '杭州市' },
+  areaName: { type: String, default: '浙江省' },
   // 显示下级行政区级数,行政区级别包括：国家、省/直辖市、市、区/县4个级别
   subdistrict: { type: Number, default: 0 },
   // 是否返回行政区边界坐标点 all / base
   extensions: { type: String, default: 'all' },
   // 搜索范围[对应文档 https://lbs.amap.com/api/javascript-api/reference/search#m_AMap.DistrictSearch]
-  level: { type: String, default: 'city' },
+  level: { type: String, default: 'province' },
   // 边界线配置
   polylineConfig: {
     type: Object,
@@ -90,7 +90,7 @@ const props = defineProps({
         // 唯一值
         iden: '点位3',
         // 坐标
-        lngLat: [120.083102, 30.129654],
+        lngLat: [120.200556, 30.209451],
         // marker点位基于坐标的偏移量
         offset: [-13, -30],
         // 自定义图标(Object可设置精灵图定位，String为图标地址)
@@ -192,6 +192,7 @@ const renderPoint = () => {
       const maker = new AMap.Marker({
         position: new AMap.LngLat(...pointData[i].lngLat),
         offset: new AMap.Pixel(...pointData[i].offset),
+        // content: `<div class="map_content">我是内容</div>`,
         icon,
       })
       // 点位添加点击事件
@@ -233,5 +234,19 @@ onMounted(() => {
 
 .amap-container {
   background-image: unset;
+}
+
+::v-deep(.map_content) {
+  width: 100px;
+  height: 30px;
+  background-color: rgba(110, 194, 194, 0.8);
+  line-height: 30px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+::v-deep(.amap-logo),
+::v-deep(.amap-copyright) {
+  opacity: 0;
 }
 </style>
