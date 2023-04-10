@@ -12,5 +12,6 @@ declare module '@vue/runtime-core' {
     AButton: typeof import('ant-design-vue/es')['Button']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    VMap: typeof import('./../components/VMap.vue')['default']
   }
 }

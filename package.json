@@ -13,6 +13,7 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@vuemap/vue-amap": "^2.0.5",
     "@vuemap/vue-amap-extra": "^2.0.1",
     "@vuemap/vue-amap-loca": "^2.0.3",
